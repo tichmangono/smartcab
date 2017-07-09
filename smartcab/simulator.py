@@ -223,6 +223,7 @@ class Simulator(object):
             # Increment
             total_trials = total_trials + 1
             trial = trial + 1
+            a.epsilon += -0.05
 
         # Clean up
         if self.log_metrics:
