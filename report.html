@@ -11907,18 +11907,18 @@ From running the code as it stands we discover a few things:</p>
 <ul>
 <li><p>The agent.py has several flags that can be set to affect the simulation:</p>
 <ul>
-<li>Learning: will make sure that the agent uses Q-Learning i.e. that in every step,it will take its next step based on maximizing the likelihood of receiving the most rewards and/or minimizing penalties. So, this definite goal will change the simulation so that it accumulates more rewards.</li>
-<li>epsilon: the random exploration flag dictates the level of stochasticity in the way in which the agent executes chosen actions. If epsilon is 1, the model is deterministic i.e. the agent will execute the chosen action with probability of 1 (all the time). Making it a deterministic model. However, if epsilon is between 0 and 1, the model becomes stochastic - the higher epsilon is, the more probable it is that the agent will execute the chosen action, but it will also "explore" other actions with probability (1-epsilon)</li>
-<li>alpha: the learning rate determines the rate at which the agent learns the optimal policy when is is being trained (when the Learning flag is set to True). When alpha needs to be optimal, at just the right level. If it is too high, the model may not converge to the optimal policy (it will continue jumping from state-to-state without learning the optimal policy) and if alpha  is too low, it will take a long time converge and may even get stuck in a local optima instead of the global optima.</li>
+<li><strong>Learning</strong>: will make sure that the agent uses Q-Learning i.e. that in every step,it will take its next step based on maximizing the likelihood of receiving the most rewards and/or minimizing penalties. So, this definite goal will change the simulation so that it accumulates more rewards.</li>
+<li><strong>epsilon</strong>: the random exploration flag dictates the level of stochasticity in the way in which the agent executes chosen actions. If epsilon is 1, the model is deterministic i.e. the agent will execute the chosen action with probability of 1 (all the time). Making it a deterministic model. However, if epsilon is between 0 and 1, the model becomes stochastic - the higher epsilon is, the more probable it is that the agent will execute the chosen action, but it will also "explore" other actions with probability (1-epsilon)</li>
+<li><strong>alpha</strong>: the learning rate determines the rate at which the agent learns the optimal policy when is is being trained (when the Learning flag is set to True). When alpha needs to be optimal, at just the right level. If it is too high, the model may not converge to the optimal policy (it will continue jumping from state-to-state without learning the optimal policy) and if alpha  is too low, it will take a long time converge and may even get stuck in a local optima instead of the global optima.</li>
 </ul>
 </li>
-<li><p>In environment.py, get_next_waypoint(self) function is used when an agent takes action</p>
+<li><p>In environment.py python file, the Environment class function that is cleed when an agenet performs an action is  --&gt;  <strong>self.env.act()</strong> which takes the class and an chosen action as inputs. "env" is the class object name for environment in this case.</p>
 </li>
 <li>In simulator.py The difference between render_text() vs. render() is:<ul>
-<li>render.text() prints the logged messages of the simulation to the terminal/command prompt while render() will print to the GUI if available. The former also contains more information than, and can be used to supplement the latter. </li>
+<li><strong>render.text()</strong> prints the logged messages of the simulation to the terminal/command prompt while <strong>render()</strong> will print to the GUI if available. The former also contains more information than, and can be used to supplement the latter. </li>
 </ul>
 </li>
-<li>No, the next_waypoint() function in planner.py does NOT consider the North-West direction first before East-West. In fact it considers the East-West direction first</li>
+<li>No, the <strong>next_waypoint()</strong> function in planner.py does NOT consider the North-West direction first before East-West. In fact it considers the East-West direction first</li>
 </ul>
 
 </div>
@@ -13162,12 +13162,12 @@ wYRpE4TuAAAAAElFTkSuQmCC
 <p><strong>Answer:</strong></p>
 <p>Factors relevant for <strong>both</strong> safety and efficiency are :</p>
 <ul>
-<li><strong>waypoint</strong> this  input  encompasses an aspect of safety i.e. going in the right direction (going in the wrong direction may lead to collisions or violations at the intersection) as well as an aspect of efficiency i.e. choosing the shortest or most direct route to the final destination so as to get there within the specified time.</li>
+<li><strong>waypoint</strong> is a very relevant an aspect of efficiency i.e. choosing the shortest or most direct route to the final destination so as to get there within the specified time.</li>
 <li><strong>light</strong>: the color of the light tells the car to proceed or wait. This is relevant for safety because it prevents collisions and accidents. If the agent proceeds on a red light, it will commit a traffic violation and maybe even cause an accident.</li>
-<li><strong>left</strong>: the car to the left may need to travel in a direction that intersects with the direction of the Smartcab, thus to avoid collision the agent must be aware of this so as not to cause an major or minor accident</li>
-<li><strong>oncoming</strong>: oncoming traffic determines whether the agent can mark different turns or not. Thus awareness of direction of oncoming traffic also avoids accidents i.e if the oncoming intends to go forward, the agent may NOT make a left turn, especially when the light is also red. Otherwise, this would lead to traffic voiolations and/or accidents.</li>
+<li><strong>left</strong>: the car to the left may need to travel in a direction that intersects with the direction of the Smartcab, thus to avoid collision the agent must be aware of this so as not to cause an major or minor accident, making this input relevant for safety</li>
+<li><strong>oncoming</strong>: oncoming traffic determines whether the agent can mark different turns or not. Thus awareness of direction of oncoming traffic also avoids accidents i.e if the oncoming intends to go forward, the agent may NOT make a left turn, especially when the light is also red. Otherwise, this would lead to traffic voiolations and/or accidents. So this input is relevant for safety.</li>
 </ul>
-<p>Note: I believe that deadline feature is not really important for safety and efficiency since the agent does not use it as a direct input but only to monitor the time remaining. Additionally the intention of the car to the right should not be significant because it would not affect our decisions in terms of traffic laws and right of way.</p>
+<p>Note: I believe that deadline feature is not really important for safety and efficiency since the agent does not use it as a direct input but only to monitor the time remaining. Additionally the intention of the car to the right should not be significant because it would not affect our decisions in terms of traffic laws and right of way on US roads.</p>
 
 </div>
 </div>
@@ -13201,18 +13201,16 @@ wYRpE4TuAAAAAElFTkSuQmCC
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<p>Using the features available to construct the size of the state space then we would calculate the combinations of all key inputs and the number of choices within each input.</p>
+<p>Originally we had 6 features, but we decided that <strong>deadline</strong> and <strong>right</strong> do not affect the safety and reliability of our agent so we should only focus on the most relevant features. We need just enough features to learn the environment well enough to make the optmial decisions but not so many that the state space size would explode (due to the curse of dimensionality) especially if its providing redudant/irrelevant information to learn from. So narrowing it down the chosen inputs are:</p>
 
 <pre><code>waypoint --&gt; 3 choices: forward, left, right
 light    --&gt; 2 choices : red OR  green
 left     --&gt; 4 choices: None, forward, left, right
-right    --&gt; 4 choices: None, forward, left, right 
 oncoming --&gt; 4 choices: None, forward, left, right
 
-
 </code></pre>
-<p>Calculating, this gives us (3) x (2) x (4)^3  = 384. Thus the size of the state space is 384.
-Yes, it is possible for the agent to learn in a reasonable number of trials since 384 is not a very big number.</p>
+<p>Using these to construct the size of the state space, we would calculate the combinations of all key inputs and the number of choices within each input. calculating... (3) x (2) x (4)^2  = 96.    Thus the size of the state space is 96.</p>
+<p>Yes, it is possible for the agent to learn in a reasonable number of trials since 96 is a very small number in computational terms!</p>
 
 </div>
 </div>
@@ -24217,9 +24215,15 @@ wpJuFG6a/VUAAAAASUVORK5CYII=
 <div class="inner_cell">
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
-<ul>
-<li>Looking at the mechanics of the question, it really doesn't matter much which deacay function is used for the agent since the decay function is mainly there to determine the number of training trials. So I decided to use the simplest, linear decay function (<strong>epsilon = epsilon - 0.002</strong>), with a small decay step of 0.002 to allow for a sufficient number of trials since we are working in the unit space of 0 to 1 for our epsilon variable. Once I fixed the decay function, all that matters now are alpha, epsilon and tolerance which can be tweaned in the following ways:</li>
-</ul>
+<p>There are several ways of finding the optimal policy, including but not limited to:</p>
+
+<pre><code>- trial and error with different values of alpha and epsilon
+- trying decaying values for either or both alpha and epsilon (gridsearch techniques)
+- increasing the number of trials which may increase learning
+- selecting the best, most relevant and adequate set of input features
+
+</code></pre>
+<p>In this exercise, I used a combination of changing alpha and epsilon values while decaying epsilon. I decided to use the simplest, linear decay function (<strong>epsilon = epsilon - 0.002</strong>), with a small decay step of 0.002 to allow for a sufficient number of trials since we are working in the unit space of 0 to 1 for our epsilon variable. Once I fixed the decay function, all that matters now are alpha, epsilon and tolerance which can be tweaned in the following ways:</p>
 <table>
 <thead><tr>
 <th>Option</th>
@@ -24284,7 +24288,7 @@ wpJuFG6a/VUAAAAASUVORK5CYII=
 <ul>
 <li>The final model, OPTION 6 gave the best results. I used a linear decay function for epsilon, <strong>epsilon = epsilon - 0.002</strong> . This exploration factor decays by a small amount for each trail to allow the agent a lot of time to learn before hitting the tolerance level. The more the agent learns, the safer and more reliable it becomes over time.</li>
 <li>The agent went through ~500 training trials before the agent began testing. This is calculated as <strong>(epsilon-tolerance)/decay_step  = (0.99-0.0005)/0.002 + 1 = 500 </strong></li>
-<li>I used an epsilon of 0.99 and tolerance of 0.0005 which are further apart i.e. big numerical difference in order to make sure that my agent had enough time to learn. Notice this allows about 500 training trials which is  above the number of combinations in the state space size calculated in previous question (384). I used and an alpha rate of 0.99 in order to transfer the reward as efficiently as possible without discounting - this gives the correct signal to the agent, allowing it to evaluate the most optimal action and the find the best policy.</li>
+<li>I used an epsilon of 0.99 and tolerance of 0.0005 which are further apart i.e. big numerical difference in order to make sure that my agent had enough time to learn. Notice this allows about 500 training trials which is  above the number of combinations in the state space size calculated in previous question (96). I used and an alpha rate of 0.99 in order to transfer the reward as efficiently as possible without discounting - this gives the correct signal to the agent, allowing it to evaluate the most optimal action and the find the best policy.</li>
 <li>There was significant improvement using this Q-learner compared to the previous basic agent/learner. Safety increase from F to A+ while Reliability improved from F to A.</li>
 <li>Yes, the results show that the driving agent has successfully learned the appropriate policy. It is very clear that it started from a place of almost no safety and reliability to have the best score in safety and the second best score on reliability. In terms of Safety, the number of bad decisions incrementally decrease as training trails increase and for realiability, the score is not good up until the agent has done between 300 trials when it starts to get reliability scores above 80% the finally ends up in the A grade levels (&gt;90%)!</li>
 <li>Yes, I am very satisfied with the safety ratings of the Smartcab because it is now 100% safe, which removes any danger from riding it so no lives or property are lost or damaged. As for reliability, I am happy about it, because  it reaches the destination more than 90% of the time. However, it still misses the destination even for that  very small number of times which may lead to unsatisfied customers. I would look more into improving the reliability, probably using more training (including the "destination" feature) however, I will not do this now because it will blow up my state space size by a factor of at least 20. For real world purposes, I would get insurance and a lot of bonus rides to appease customers who end up on the few unreliable rides.</li>
@@ -24413,10 +24417,11 @@ Notice that the None action has the highest reward value of 1.83 in this case, j
 <div class="text_cell_render border-box-sizing rendered_html">
 <p><strong>Answer:</strong></p>
 <ul>
-<li>Smartcab characteristic:Discounting future rewards will encourage the smartcab to continue looping around the environment take the maximum reward without reaching the destination. That is, by discounting any future rewards to be gained by reaching the destination, thus discouraging the agent from actually getting to the destination, reducing the reliability rates. It is actually possible that the agent might learn not to move at all i.e. take the "None" action all the time, staying in one position.</li>
-<li>Environment characteristic: Discounting future rewards will also make the impact of negative rewards in the future seem very low today, thus the encourging the agent to take actions that may violate traffic laws or cause accidents, reducing the safety.</li>
+<li><p>Smartcab characteristic: the smartcab makes decisions based on the value of the taking an action in the current state. Its inputs are <strong>waypoint, light, left, and oncoming</strong>. The only directional input is waypoint which tells the agent how to proceed towards the destination without actually telling the agent where exactly it is going on the grid square. Thus, the learning is "location-agnostic" i.e. it does not matter where the agent is located or where the destination actually is relative to the agent, it just follows the waypoint provided given the other inputs at that intersection. Thus, it is impossible to propagate back the rewards from an unknown future (agent does not know the exact location of the destination and it also has no idea how much time remains i.e. how many steps to the destination - in my specific implementation). Of course, we could always supply the deadline input but still, the future remains unknown because of "location-agnostic" inputs.</p>
+</li>
+<li><p>Environment characteristic: This environment is based on random destinations and the destination changes after every trial. Thus after several rounds of training, the environment would have set all or most of its intersections as the destination which should in effect adjust the average reward at every intersection such that they are equal over time. Before this happens however, the agent would actually begin to learn to prioritize random goals dependent on the random destinations. This will set high Q values for random actions at intersections  such that the agent will value these rewards more and commit traffic violations in the meantime. So this increases traffic violations in the near term but equalizes after many trials since many intersections would have randomly become destinations at some point during learning.</p>
+</li>
 </ul>
-<p>This interplay between safety and realiabilty will be in opposite directions such that you cannot have high realiability with high safety, it would have to be once or the other which is not very useful for the purposes of a self-driving smartcab.</p>
 
 </div>
 </div>
